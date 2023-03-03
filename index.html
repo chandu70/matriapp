@@ -1,0 +1,86 @@
+<html>
+<head>
+<title>Google Authentication </title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div id="login-box">
+  <div class="left">
+    <h1>Sign up</h1>
+    
+    <input type="text" id="username" name="username" placeholder="Username" />
+    <input type="text" id="email" name="email" placeholder="E-mail" />
+    <input type="password" id="password" name="password" placeholder="Password"/>
+    
+    <input type="submit" id="saveData" name="signup_submit" value="Sign Up" />
+  </div>
+  
+  <div class="right">
+    <span class="loginwith">Sign in with<br />social network</span>
+    
+    <button class="social-signin facebook">Log in with facebook</button>
+    <button class="social-signin twitter">Log in with Twitter</button>
+    <button class="social-signin google" id='login'>Log in with Google+</button>
+  </div>
+  <div class="or">OR</div>
+</div>
+</body>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
+  import { GoogleAuthProvider, signInWithRedirect, getRedirectResult, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
+    import { getDatabase,set,ref } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
+
+
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyC066-7i0KYbueZHDwKlF4jHQr5GJhiEyU",
+    authDomain: "authenticationapp-42110.firebaseapp.com",
+    databaseURL: "https://authenticationapp-42110-default-rtdb.firebaseio.com",
+    projectId: "authenticationapp-42110",
+    storageBucket: "authenticationapp-42110.appspot.com",
+    messagingSenderId: "662901655848",
+    appId: "1:662901655848:web:440ce60e6997c282f6e81d",
+    measurementId: "G-Y1ZKPE2N0L"
+  };
+
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database=getDatabase(app);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider(app);
+
+ saveData.addEventListener('click',(e) => {
+  var email=document.getElementById('email').value;
+  var password=document.getElementById('password').value;
+  var username=document.getElementById('username').value;
+  const auth = getAuth();
+createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    // ...
+    set(ref(database,'users/'+user.uid)),{
+      username:username,
+     email:email
+     }
+    alert('USER CREATED');
+  })
+  .catch((error))=>{
+    const errorCode=error.code;
+    const errorMessage=error.message;
+    alert(errorMessage)
+  }
+  
+  });
+
+</script>
+
+</html>
